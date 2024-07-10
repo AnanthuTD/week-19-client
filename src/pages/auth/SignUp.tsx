@@ -1,4 +1,13 @@
-import { Form, Input, Button, Card, Typography, message, Alert } from "antd";
+import {
+	Form,
+	Input,
+	Button,
+	Card,
+	Typography,
+	message,
+	Alert,
+	theme,
+} from "antd";
 import axios from "axios";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -17,8 +26,12 @@ interface FormData {
 }
 
 const SignUp = () => {
+	const {
+		token: { colorBgContainer, colorPrimaryText },
+	} = theme.useToken();
+
 	const [error, setError] = useState<SignUpError | null>(null);
-	const onFinish = async (values:FormData) => {
+	const onFinish = async (values: FormData) => {
 		console.log("Received values from form: ", values);
 		try {
 			await axios.post("/api/auth/sign-up", values);
@@ -37,14 +50,13 @@ const SignUp = () => {
 				justifyContent: "center",
 				alignItems: "center",
 				minHeight: "100vh",
+				background: colorBgContainer,
+				color: colorPrimaryText,
 			}}
 		>
 			<Card style={{ width: 400, padding: "24px", borderRadius: "8px" }}>
 				<Title level={2}>Sign-up</Title>
-				<Form
-					name="signup"
-					onFinish={onFinish}
-				>
+				<Form name="signup" onFinish={onFinish}>
 					<Form.Item
 						name="firstName"
 						rules={[

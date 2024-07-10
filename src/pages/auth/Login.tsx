@@ -5,26 +5,31 @@ import {
 	Button,
 	Alert,
 	Typography,
-	message,
 	Divider,
+	theme,
 } from "antd";
 import axios from "axios";
 import { Link, Navigate } from "react-router-dom";
 import { useState } from "react";
-import { GoogleCredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { User } from "../../types";
 import "./styles.css";
 import { AppDispatch, RootState } from "../../app/store";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../features/user/userSlice";
 import { setAuthorizationToken } from "../../lib/axiosPrivate";
+import GoogleButton from "./ui/GoogleButton";
 
 interface LoginError {
 	msg?: string;
 	code?: string;
 	error?: boolean;
 }
+
 const Login = () => {
+	const {
+		token: { colorBgContainer, colorPrimaryText },
+	} = theme.useToken();
+
 	const user = useSelector((state: RootState) => state.user.data);
 	const dispatch = useDispatch<AppDispatch>();
 
@@ -36,29 +41,9 @@ const Login = () => {
 			const res = await axios.post("/api/auth/login", values, {
 				withCredentials: true,
 			});
-			const { user } = res.data;
+			const { user, accessToken }: { user: User; accessToken: string } =
+				res.data;
 			if (user) {
-				dispatch(login(user));
-			}
-		} catch (error) {
-			if (axios.isAxiosError(error) && error.response) {
-				setError(error.response.data);
-				console.error(error.response.data.msg);
-			} else {
-				setError({ msg: "unexpected error" });
-				console.error(error);
-			}
-		}
-	};
-
-	const responseMessage = async (response: GoogleCredentialResponse) => {
-		try {
-			const { data } = await axios.post(
-				"/api/auth/sign-in/google",
-				response
-			);
-			const { user, accessToken }: { user: User } = data;
-			if (user && accessToken) {
 				dispatch(login(user));
 				setAuthorizationToken(accessToken);
 			}
@@ -73,15 +58,6 @@ const Login = () => {
 		}
 	};
 
-	const errorMessage = (error: {
-		error: string;
-		error_description?: string;
-		error_uri?: string;
-	}) => {
-		message.error(error.error);
-		console.error(error);
-	};
-
 	return user ? (
 		<Navigate
 			to={user.role === "admin" ? "/admin/user" : "/user/dashboard"}
@@ -94,20 +70,14 @@ const Login = () => {
 				justifyContent: "center",
 				alignItems: "center",
 				height: "100vh",
+				background: colorBgContainer,
+				color: colorPrimaryText,
 			}}
 		>
 			<Card style={{ width: 500 }} title="Login">
 				<div className="google-login-container">
-					<GoogleLogin
-						onSuccess={responseMessage}
-						// @ts-expect-error not assignable to type void
-						onError={errorMessage}
-						useOneTap
-						use_fedcm_for_prompt={true}
-						auto_select
-						text="continue_with"
-						ux_mode="popup"
-						width={300}
+					<GoogleButton
+						setError={(errorMessage) => setError({ msg: errorMessage})}
 					/>
 				</div>
 				<Divider />
