@@ -1,0 +1,49 @@
+@keyframes typing {
+   from { width: 0; }
+   to { width: 100%; }
+}
+
+.typing-text {
+   overflow: hidden;
+   white-space: nowrap; 
+   margin: 0 auto; 
+   letter-spacing: .15em; 
+   animation:
+       typing 3.5s steps(40, end)
+}
+
+.container {
+   height: 100vh;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: column;
+}
+
+.w-full{
+   width: 100%;
+}
+
+max-w-2xl{
+   max-width: 42rem
+}
+
+.mb-10 {
+   margin-bottom: 2.5rem;
+}
+
+.mr-2 {
+   margin-right: 0.5rem;
+}
+
+.p-4 {
+   padding: 1rem;
+}
+
+.mb-8 {
+   margin-bottom: 2rem;
+}
+
+.w-fit {
+   width: fit-content;
+}

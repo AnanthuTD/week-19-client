@@ -1,0 +1,11 @@
+.google-login-container {
+   display: flex;
+   justify-content: center;
+   margin-bottom: 16px;
+}
+
+.google-login-container > div {
+   width: 100% !important;
+   display: flex;
+   justify-content: center;
+}
