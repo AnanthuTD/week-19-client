@@ -50,6 +50,14 @@ const AvatarUpload: React.FC = () => {
 		formData.append("avatar", options.file);
 
 		try {
+			setFileList([
+				{
+					uid: "0",
+					name: "current-avatar",
+					status: "uploading",
+					url: user?.avatar,
+				},
+			]);
 			const { data }: { data: { avatar: string } } = await axiosPrivate.post(
 				"/api/user/upload/avatar",
 				formData,
