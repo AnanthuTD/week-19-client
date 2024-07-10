@@ -8,13 +8,13 @@ import SuspenseWrapper from "./components/SuspenseWraper";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Provider } from "react-redux";
 import { store } from "./app/store";
-import UserLayout from "./pages/UserLayout";
+// import UserLayout from "./pages/Layout";
 import { ConfigProvider, theme } from "antd";
 
 const UserManagement = React.lazy(() => import("./pages/admin/Dashboard"));
 const Login = React.lazy(() => import("./pages/auth/Login"));
-const Profile = React.lazy(() => import("./pages/admin/Profile"));
-const Dashboard = React.lazy(() => import("./pages/user/Dashboard"));
+const Profile = React.lazy(() => import("./pages/Profile"));
+const Dashboard = React.lazy(() => import("./pages/Profile"));
 const SignUp = React.lazy(() => import("./pages/auth/SignUp"));
 const CreateUser = React.lazy(() => import("./pages/admin/CreateUser"));
 const Home = React.lazy(() => import("./pages/home/Home"));
@@ -56,7 +56,7 @@ const router = createBrowserRouter([
 				path: "user",
 				element: (
 					<SuspenseWrapper>
-						<UserLayout />
+						<Layout />
 					</SuspenseWrapper>
 				),
 				children: [
