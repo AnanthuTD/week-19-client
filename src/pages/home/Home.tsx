@@ -1,12 +1,15 @@
 import logoUrl from "../../assets/react.svg";
-import { Button, Row, Col } from "antd";
+import { Button, Row, Col, theme } from "antd";
 import { UserOutlined, TeamOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import "./styles.css";
 
 const NavigationPage = () => {
+	const {
+		token: { colorBgContainer, colorPrimaryText },
+	} = theme.useToken();
 	return (
-		<div className="container p-4">
+		<div className="container p-4" style={{ background: colorBgContainer, color:colorPrimaryText }}>
 			<div className="mb-8">
 				<img src={logoUrl} alt="Logo" width={100} height={100} />
 			</div>
@@ -15,7 +18,7 @@ const NavigationPage = () => {
 			</div>
 			<Row gutter={[24, 24]} justify="center" className="w-full max-w-2xl">
 				<Col xs={24} sm={12} flex={"none"}>
-					<Link to="/dashboard">
+					<Link to="/user/dashboard">
 						<Button type="primary" size="large" icon={<UserOutlined />}>
 							User
 						</Button>
