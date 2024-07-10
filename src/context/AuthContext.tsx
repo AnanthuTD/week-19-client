@@ -1,10 +1,9 @@
-import axios from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { User } from "../types";
 import { Spin } from "antd";
-import { AppDispatch, RootState } from "../app/store";
-import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../app/store";
+import { useDispatch } from "react-redux";
 import { login } from "../features/user/userSlice";
 import { axiosPrivate } from "../lib/axiosPrivate";
 
