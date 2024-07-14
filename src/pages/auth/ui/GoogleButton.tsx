@@ -39,7 +39,7 @@ function GoogleButton({ setError }: { setError: (errorData: string) => void }) {
 	}
 
 	async function onSuccessOneTap(response: GoogleCredentialResponse) {
-		console.log(response);
+		// console.log(response);
 
 		try {
 			const { data } = await axios.post(

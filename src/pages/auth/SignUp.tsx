@@ -32,7 +32,7 @@ const SignUp = () => {
 
 	const [error, setError] = useState<SignUpError | null>(null);
 	const onFinish = async (values: FormData) => {
-		console.log("Received values from form: ", values);
+		// console.log("Received values from form: ", values);
 		try {
 			await axios.post("/api/auth/sign-up", values);
 			message.success("Signed up successfully! Please login");
