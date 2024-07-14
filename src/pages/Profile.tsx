@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Form, Input, Button, Card, message, Typography } from "antd";
 import { axiosPrivate } from "../lib/axiosPrivate";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,9 +18,19 @@ const Profile = () => {
 	const user = useSelector((state: RootState) => state.user.data);
 	const dispatch = useDispatch<AppDispatch>();
 
+	useEffect(() => {
+		if (user) {
+			form.setFieldsValue({
+				firstName: user.name.firstName,
+				lastName: user.name.lastName,
+				email: user.email,
+			});
+		}
+	}, [user, form]);
+
 	const onFinish = async (values: FormData) => {
 		try {
-			const {data} = await axiosPrivate.put("/api/user/profile", values);
+			const { data } = await axiosPrivate.put("/api/user/profile", values);
 			dispatch(login(data.profile));
 			message.success("Profile updated successfully");
 		} catch (error) {
@@ -34,8 +45,7 @@ const Profile = () => {
 				display: "flex",
 				justifyContent: "center",
 				alignItems: "center",
-				// height: "100vh",
-				paddingTop: '2rem'
+				paddingTop: "2rem",
 			}}
 		>
 			<Card
@@ -43,10 +53,7 @@ const Profile = () => {
 				title={
 					<Typography.Text>
 						Welcome back{" "}
-						<Typography.Text
-							italic
-							style={{ display: "inline-block" }}
-						>
+						<Typography.Text italic style={{ display: "inline-block" }}>
 							{user?.name.firstName + " " + user?.name.lastName}
 						</Typography.Text>
 					</Typography.Text>
@@ -59,7 +66,7 @@ const Profile = () => {
 						marginBottom: 20,
 					}}
 				>
-					<AvatarUpload/>
+					<AvatarUpload />
 				</div>
 				<Form
 					form={form}
@@ -70,7 +77,6 @@ const Profile = () => {
 						firstName: user?.name.firstName,
 						lastName: user?.name.lastName,
 						email: user?.email,
-						_id: user?._id,
 					}}
 				>
 					<Form.Item
@@ -90,7 +96,6 @@ const Profile = () => {
 						label="Last Name"
 						rules={[
 							{
-								// required: true,
 								message: "Please input your last name!",
 							},
 						]}
@@ -111,15 +116,10 @@ const Profile = () => {
 						<Input />
 					</Form.Item>
 					<Form.Item
-						name={"password"}
+						name="password"
 						label="New Password"
 						rules={[
 							{
-								// required: true,
-								message: "Please input your password!",
-							},
-							{
-								// required: true,
 								pattern:
 									/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/,
 								message:

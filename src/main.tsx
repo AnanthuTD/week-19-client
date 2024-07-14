@@ -1,20 +1,18 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Layout from "./pages/Layout";
-import "./index.css";
-import AuthProvider from "./context/AuthContext";
 import SuspenseWrapper from "./components/SuspenseWraper";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Provider } from "react-redux";
 import { store } from "./app/store";
-// import UserLayout from "./pages/Layout";
 import { ConfigProvider, theme } from "antd";
+import "./index.css";
 
+const Layout = React.lazy(() => import("./pages/Layout"));
+const AuthProvider = React.lazy(() => import("./context/AuthContext"));
 const UserManagement = React.lazy(() => import("./pages/admin/Dashboard"));
 const Login = React.lazy(() => import("./pages/auth/Login"));
 const Profile = React.lazy(() => import("./pages/Profile"));
-const Dashboard = React.lazy(() => import("./pages/Profile"));
 const SignUp = React.lazy(() => import("./pages/auth/SignUp"));
 const CreateUser = React.lazy(() => import("./pages/admin/CreateUser"));
 const Home = React.lazy(() => import("./pages/home/Home"));
@@ -30,77 +28,41 @@ const router = createBrowserRouter([
 		element: <Privacy />,
 	},
 	{
-		element: (
-			<SuspenseWrapper>
-				<AuthProvider />
-			</SuspenseWrapper>
-		),
+		element: <AuthProvider />,
 		children: [
 			{
 				path: "sign-up",
-				element: (
-					<SuspenseWrapper>
-						<SignUp />
-					</SuspenseWrapper>
-				),
+				element: <SignUp />,
 			},
 			{
 				path: "login",
-				element: (
-					<SuspenseWrapper>
-						<Login />
-					</SuspenseWrapper>
-				),
+				element: <Login />,
 			},
 			{
 				path: "user",
-				element: (
-					<SuspenseWrapper>
-						<Layout />
-					</SuspenseWrapper>
-				),
+				element: <Layout />,
 				children: [
 					{
 						path: "dashboard",
-						element: (
-							<SuspenseWrapper>
-								<Dashboard />
-							</SuspenseWrapper>
-						),
+						element: <Profile />,
 					},
 				],
 			},
 			{
 				path: "admin",
-				element: (
-					<SuspenseWrapper>
-						<Layout />
-					</SuspenseWrapper>
-				),
+				element: <Layout />,
 				children: [
 					{
 						path: "",
-						element: (
-							<SuspenseWrapper>
-								<Profile />
-							</SuspenseWrapper>
-						),
+						element: <Profile />,
 					},
 					{
 						path: "user",
-						element: (
-							<SuspenseWrapper>
-								<UserManagement />
-							</SuspenseWrapper>
-						),
+						element: <UserManagement />,
 					},
 					{
 						path: "create-user",
-						element: (
-							<SuspenseWrapper>
-								<CreateUser />
-							</SuspenseWrapper>
-						),
+						element: <CreateUser />,
 					},
 				],
 			},
@@ -109,14 +71,16 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-	<ConfigProvider theme={{algorithm: theme.darkAlgorithm}}>
+	<ConfigProvider theme={{ algorithm: theme.darkAlgorithm }}>
 		<Provider store={store}>
 			<GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID}>
 				<React.StrictMode>
-					<RouterProvider
-						router={router}
-						future={{ v7_startTransition: true }}
-					/>
+					<SuspenseWrapper>
+						<RouterProvider
+							router={router}
+							future={{ v7_startTransition: true }}
+						/>
+					</SuspenseWrapper>
 				</React.StrictMode>
 			</GoogleOAuthProvider>
 		</Provider>

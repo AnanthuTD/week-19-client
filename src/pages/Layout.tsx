@@ -8,6 +8,7 @@ import { AppDispatch, RootState } from "../app/store";
 import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
 import { logout } from "../features/user/userSlice";
 import { axiosPrivate } from "../lib/axiosPrivate";
+import SuspenseWrapper from "../components/SuspenseWraper";
 
 const { Header, Content } = Layout;
 
@@ -74,7 +75,6 @@ const UserLayout: React.FC = () => {
 						width: "-webkit-fill-available",
 					}}
 				>
-					{/* <div className="demo-logo">Logo</div> */}
 					<Menu
 						theme="dark"
 						mode="horizontal"
@@ -98,11 +98,12 @@ const UserLayout: React.FC = () => {
 					style={{
 						background: colorBgContainer,
 						minHeight: "100%",
-						// padding: 24,
 						borderRadius: borderRadiusLG,
 					}}
 				>
-					<Outlet />
+					<SuspenseWrapper>
+						<Outlet />
+					</SuspenseWrapper>
 				</div>
 			</Content>
 		</Layout>

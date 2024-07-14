@@ -18,7 +18,6 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 function AuthProvider() {
-	// const user = useSelector((state: RootState) => state.user.data);
 	const dispatch = useDispatch<AppDispatch>();
 	const [isAuthenticating, setAuthenticating] = useState(false);
 	const navigate = useNavigate();
