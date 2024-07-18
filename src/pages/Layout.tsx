@@ -1,4 +1,4 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, Navigate, Outlet } from "react-router-dom";
 import React from "react";
 import { Avatar, Dropdown, Layout, Menu, theme, Button, message } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -7,8 +7,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../app/store";
 import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
 import { logout } from "../features/user/userSlice";
-import { axiosPrivate } from "../lib/axiosPrivate";
+import { setAuthorizationToken } from "../lib/axiosPrivate";
 import SuspenseWrapper from "../components/SuspenseWraper";
+import axios from "axios";
 
 const { Header, Content } = Layout;
 
@@ -36,7 +37,8 @@ const UserLayout: React.FC = () => {
 
 	const handleLogout = async () => {
 		try {
-			await axiosPrivate.post("/api/auth/logout");
+			setAuthorizationToken(null);
+			await axios.post("/api/auth/logout");
 			dispatch(logout());
 			googleLogout();
 			message.success("Logged out successfully");
@@ -57,6 +59,10 @@ const UserLayout: React.FC = () => {
 			),
 		},
 	];
+
+	if (!user) {
+		return <Navigate to="/login" replace />;
+	}
 
 	return (
 		<Layout style={{ height: "100vh" }}>

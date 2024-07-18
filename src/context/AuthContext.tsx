@@ -2,8 +2,8 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { User } from "../types";
 import { Spin } from "antd";
-import { AppDispatch } from "../app/store";
-import { useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "../app/store";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../features/user/userSlice";
 import { axiosPrivate } from "../lib/axiosPrivate";
 
@@ -20,6 +20,7 @@ const AuthContext = createContext<AuthContextType>({
 function AuthProvider() {
 	const dispatch = useDispatch<AppDispatch>();
 	const [isAuthenticating, setAuthenticating] = useState(false);
+	const user = useSelector((state: RootState) => state.user.data);
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -41,8 +42,8 @@ function AuthProvider() {
 			}
 		};
 
-		authenticateUser();
-	}, [dispatch, navigate]);
+		if (!user) authenticateUser();
+	}, [dispatch, navigate, user]);
 
 	return (
 		<Spin spinning={isAuthenticating} size="large" tip="authenticating">

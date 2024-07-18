@@ -3,9 +3,10 @@ import { message, Spin, Form } from "antd";
 import type { InputRef, TableColumnType, TableProps } from "antd";
 import axios from "axios";
 import { User } from "../../types";
-import { UseUser } from "../../context/AuthContext";
 import { FilterDropdownProps } from "antd/es/table/interface";
 import { axiosPrivate } from "../../lib/axiosPrivate";
+import { RootState } from "../../app/store";
+import { useSelector } from "react-redux";
 
 const Table = lazy(() => import("antd/lib/table/Table"));
 const Result = lazy(() => import("antd/lib/result"));
@@ -100,7 +101,7 @@ const App: React.FC = () => {
 	const [data, setData] = useState<User[] | []>([]);
 	const [editingKey, setEditingKey] = useState("");
 	const [dataLoading, setDataLoading] = useState(true);
-	const { user } = UseUser();
+	const user = useSelector((state: RootState) => state.user.data);
 	const searchInput = useRef<InputRef>(null);
 
 	const handleSearch = async (
@@ -387,6 +388,10 @@ const App: React.FC = () => {
 			},
 		};
 	});
+
+	/* if (!user) {
+		return <Navigate to="/login" replace />;
+	} */
 
 	return dataLoading ? (
 		<div
