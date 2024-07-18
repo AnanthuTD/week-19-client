@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../app/store";
 import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
 import { logout } from "../features/user/userSlice";
-import { axiosPrivate } from "../lib/axiosPrivate";
+import { axiosPrivate, setAuthorizationToken } from "../lib/axiosPrivate";
 import SuspenseWrapper from "../components/SuspenseWraper";
 
 const { Header, Content } = Layout;
@@ -37,6 +37,7 @@ const UserLayout: React.FC = () => {
 	const handleLogout = async () => {
 		try {
 			await axiosPrivate.post("/api/auth/logout");
+			setAuthorizationToken(null);
 			dispatch(logout());
 			googleLogout();
 			message.success("Logged out successfully");
